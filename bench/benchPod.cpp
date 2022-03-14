@@ -1,4 +1,4 @@
-#include <benchmark/benchRef.h>
+#include <benchmark/benchmark.h>
 #include "../src/Person.h"
 
 class PodPerson64bH : public benchmark::Fixture {

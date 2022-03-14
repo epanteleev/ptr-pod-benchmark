@@ -21,6 +21,10 @@ public:
         m_balance(p.m_balance) {}
 
     ~Person64bH() {
+        destroy();
+    }
+
+    void destroy() {
         delete m_name;
         delete m_lastname;
     }
@@ -53,6 +57,10 @@ public:
             m_balance(p.m_balance) {}
 
     ~Person128bH() {
+        destroy();
+    }
+
+    void destroy() const {
         delete m_name;
         delete m_lastname;
     }
