@@ -15,9 +15,9 @@ public:
     void SetUp(const benchmark::State &state) override {
         persons.clear();
         for (auto i = 0; i < state.range(0); i++) {
-            persons.push_back(new Person64bH(random::genstring(10),
-                                             random::genstring(10),
-                                             random::genbalance()));
+            persons.push_back(new Person64bH(rd::genstring(10),
+                                             rd::genstring(10),
+                                             rd::genbalance()));
         }
     }
 
@@ -39,9 +39,9 @@ public:
         persons.clear();
         arena.reset();
         for (auto i = 0; i < state.range(0); i++) {
-            persons.push_back(arena.alloc<Person64bH>(random::genstring(10),
-                                             random::genstring(10),
-                                             random::genbalance()));
+            persons.push_back(arena.alloc<Person64bH>(rd::genstring(10),
+                                                      rd::genstring(10),
+                                                      rd::genbalance()));
         }
     }
 
@@ -63,9 +63,9 @@ public:
     void SetUp(const benchmark::State &state) override {
         persons.clear();
         for (auto i = 0; i < state.range(0); i++) {
-            persons.push_back(new Person128bH(random::genstring(10),
-                                             random::genstring(10),
-                                             random::genbalance()));
+            persons.push_back(new Person128bH(rd::genstring(10),
+                                              rd::genstring(10),
+                                              rd::genbalance()));
         }
     }
 
@@ -87,9 +87,9 @@ public:
         persons.clear();
         arena.reset();
         for (auto i = 0; i < state.range(0); i++) {
-            persons.push_back(arena.alloc<Person128bH>(random::genstring(10),
-                                              random::genstring(10),
-                                              random::genbalance()));
+            persons.push_back(arena.alloc<Person128bH>(rd::genstring(10),
+                                                       rd::genstring(10),
+                                                       rd::genbalance()));
         }
     }
 

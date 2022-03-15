@@ -1,6 +1,6 @@
 #include "Person.h"
 
-namespace random {
+namespace rd {
     const char *genstring(std::size_t length) {
         const char *string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.-#'?!";
 

@@ -77,7 +77,10 @@ public:
     std::size_t m_balance;
 };
 
-namespace random {
+static_assert(sizeof(Person64bH) == sizeof(std::uint64_t) * 4, "Unexpected Person64bH class align");
+static_assert(sizeof(Person128bH) == sizeof(std::uint64_t) * 5, "Unexpected Person128bH class align");
+
+namespace rd {
     const char* genstring(size_t length);
 
     std::size_t genbalance();
