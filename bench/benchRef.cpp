@@ -37,6 +37,7 @@ public:
 
     void SetUp(const benchmark::State &state) override {
         persons.clear();
+        arena.reset();
         for (auto i = 0; i < state.range(0); i++) {
             persons.push_back(arena.alloc<Person64bH>(random::genstring(10),
                                              random::genstring(10),
@@ -84,6 +85,7 @@ public:
 
     void SetUp(const benchmark::State &state) override {
         persons.clear();
+        arena.reset();
         for (auto i = 0; i < state.range(0); i++) {
             persons.push_back(arena.alloc<Person128bH>(random::genstring(10),
                                               random::genstring(10),
@@ -136,9 +138,9 @@ BENCHMARK_DEFINE_F(PtrPerson128bHArena, BenchPtr)(benchmark::State& state) {
     benchmark::DoNotOptimize(persons);
 }
 
-BENCHMARK_REGISTER_F(PtrPerson64bH, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Iterations(10000);
-BENCHMARK_REGISTER_F(PtrPerson128bH, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Iterations(10000);
-BENCHMARK_REGISTER_F(PtrPerson64bHArena, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Iterations(10000);
-BENCHMARK_REGISTER_F(PtrPerson128bHArena, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Iterations(10000);
+BENCHMARK_REGISTER_F(PtrPerson64bH, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+BENCHMARK_REGISTER_F(PtrPerson128bH, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+BENCHMARK_REGISTER_F(PtrPerson64bHArena, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+BENCHMARK_REGISTER_F(PtrPerson128bHArena, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
 
 BENCHMARK_MAIN();

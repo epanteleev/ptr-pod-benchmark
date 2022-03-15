@@ -55,5 +55,5 @@ BENCHMARK_DEFINE_F(PodPerson128bH, BenchPod)(benchmark::State& state) {
     benchmark::DoNotOptimize(persons);
 }
 
-BENCHMARK_REGISTER_F(PodPerson128bH, BenchPod)->Arg(1000)->Arg(10000)->Arg(100000)->Iterations(10000);
-BENCHMARK_REGISTER_F(PodPerson64bH, BenchPod)->Arg(1000)->Arg(10000)->Arg(100000)->Iterations(10000);
+BENCHMARK_REGISTER_F(PodPerson128bH, BenchPod)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+BENCHMARK_REGISTER_F(PodPerson64bH, BenchPod)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);

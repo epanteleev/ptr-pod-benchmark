@@ -6,11 +6,11 @@
 
 class Arena final {
 public:
-    static const constexpr std::size_t SIZE = 5000000;
+    static const constexpr std::size_t SIZE = 100 * 1024 * 1024;
 
 public:
     Arena() {
-        start = new char[SIZE];
+        start = new std::uint8_t[SIZE];
         current = start;
     }
 
@@ -22,19 +22,24 @@ public:
     template<typename T, typename ...Args>
     T *alloc(Args... args) {
         std::size_t s = sizeof(T);
-        capacity += s;
-        if (capacity > SIZE) {
+        reserved += s;
+        if (reserved > SIZE) {
             fprintf(stderr, "Arena was overflow\n");
             std::terminate();
         }
-        void *adr = current;
+        auto adr = current;
         current += s;
         return new(adr) T(std::forward<Args>(args)...);
     }
 
+    void reset() {
+        current = start;
+        reserved = 0;
+    }
+
 private:
-    char *start;
-    char *current;
-    std::size_t capacity{};
+    std::uint8_t *start;
+    std::uint8_t *current;
+    std::size_t reserved{};
 };
 
