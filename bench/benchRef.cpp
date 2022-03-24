@@ -98,7 +98,7 @@ public:
     std::vector<Person128bH *> persons;
 };
 
-BENCHMARK_DEFINE_F(PtrPerson64bH, BenchPtr)(benchmark::State& state) {
+BENCHMARK_DEFINE_F(PtrPerson64bH, ForwardAccess)(benchmark::State& state) {
     for (auto _ : state) {
         benchmark::ClobberMemory();
         for (auto &i: persons) {
@@ -108,7 +108,18 @@ BENCHMARK_DEFINE_F(PtrPerson64bH, BenchPtr)(benchmark::State& state) {
     benchmark::DoNotOptimize(persons);
 }
 
-BENCHMARK_DEFINE_F(PtrPerson128bH, BenchPtr)(benchmark::State& state) {
+BENCHMARK_DEFINE_F(PtrPerson64bH, RandomAccess)(benchmark::State& state) {
+    rd::RandomAccess ra(persons.size());
+    for (auto _ : state) {
+        benchmark::ClobberMemory();
+        for (std::size_t i = 0; i < persons.size(); i++) {
+            persons[ra.next()]->updateBalance(10);
+        }
+    }
+    benchmark::DoNotOptimize(persons);
+}
+
+BENCHMARK_DEFINE_F(PtrPerson128bH, ForwardAccess)(benchmark::State& state) {
     for (auto _ : state) {
         benchmark::ClobberMemory();
         for (auto &i: persons) {
@@ -118,7 +129,18 @@ BENCHMARK_DEFINE_F(PtrPerson128bH, BenchPtr)(benchmark::State& state) {
     benchmark::DoNotOptimize(persons);
 }
 
-BENCHMARK_DEFINE_F(PtrPerson64bHArena, BenchPtr)(benchmark::State& state) {
+BENCHMARK_DEFINE_F(PtrPerson128bH, RandomAccess)(benchmark::State& state) {
+    rd::RandomAccess ra(persons.size());
+    for (auto _ : state) {
+        benchmark::ClobberMemory();
+        for (std::size_t i = 0; i < persons.size(); i++) {
+            persons[ra.next()]->updateBalance(10);
+        }
+    }
+    benchmark::DoNotOptimize(persons);
+}
+
+BENCHMARK_DEFINE_F(PtrPerson64bHArena, ForwardAccess)(benchmark::State& state) {
     for (auto _ : state) {
         benchmark::ClobberMemory();
         for (auto &i: persons) {
@@ -128,7 +150,18 @@ BENCHMARK_DEFINE_F(PtrPerson64bHArena, BenchPtr)(benchmark::State& state) {
     benchmark::DoNotOptimize(persons);
 }
 
-BENCHMARK_DEFINE_F(PtrPerson128bHArena, BenchPtr)(benchmark::State& state) {
+BENCHMARK_DEFINE_F(PtrPerson64bHArena, RandomAccess)(benchmark::State& state) {
+    rd::RandomAccess ra(persons.size());
+    for (auto _ : state) {
+        benchmark::ClobberMemory();
+        for (std::size_t i = 0; i < persons.size(); i++) {
+            persons[ra.next()]->updateBalance(10);
+        }
+    }
+    benchmark::DoNotOptimize(persons);
+}
+
+BENCHMARK_DEFINE_F(PtrPerson128bHArena, ForwardAccess)(benchmark::State& state) {
     for (auto _ : state) {
         benchmark::ClobberMemory();
         for (auto &i: persons) {
@@ -138,9 +171,25 @@ BENCHMARK_DEFINE_F(PtrPerson128bHArena, BenchPtr)(benchmark::State& state) {
     benchmark::DoNotOptimize(persons);
 }
 
-BENCHMARK_REGISTER_F(PtrPerson64bH, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
-BENCHMARK_REGISTER_F(PtrPerson128bH, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
-BENCHMARK_REGISTER_F(PtrPerson64bHArena, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
-BENCHMARK_REGISTER_F(PtrPerson128bHArena, BenchPtr)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+BENCHMARK_DEFINE_F(PtrPerson128bHArena, RandomAccess)(benchmark::State& state) {
+    rd::RandomAccess ra(persons.size());
+    for (auto _ : state) {
+        benchmark::ClobberMemory();
+        for (std::size_t i = 0; i < persons.size(); i++) {
+            persons[ra.next()]->updateBalance(10);
+        }
+    }
+    benchmark::DoNotOptimize(persons);
+}
+
+BENCHMARK_REGISTER_F(PtrPerson64bH, ForwardAccess)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+BENCHMARK_REGISTER_F(PtrPerson128bH, ForwardAccess)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+BENCHMARK_REGISTER_F(PtrPerson64bHArena, ForwardAccess)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+BENCHMARK_REGISTER_F(PtrPerson128bHArena, ForwardAccess)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+
+BENCHMARK_REGISTER_F(PtrPerson64bH, RandomAccess)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+BENCHMARK_REGISTER_F(PtrPerson128bH, RandomAccess)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+BENCHMARK_REGISTER_F(PtrPerson64bHArena, RandomAccess)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
+BENCHMARK_REGISTER_F(PtrPerson128bHArena, RandomAccess)->Arg(1000)->Arg(10000)->Arg(100000)->Arg(1000000);
 
 BENCHMARK_MAIN();

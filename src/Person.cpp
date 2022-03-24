@@ -20,8 +20,7 @@ namespace rd {
     }
 
     std::size_t genbalance() {
-        std::random_device rd;
-        std::mt19937 mt(rd());
+        std::mt19937 mt(20222022122);
         std::uniform_int_distribution<std::size_t> dist(5, 100000);
         return dist(mt);
     }
