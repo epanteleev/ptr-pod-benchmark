@@ -33,12 +33,27 @@ public:
         m_balance += (std::size_t) (m_balance * ((double) percent / 100));
     }
 
+    bool operator==(const Person64bH& other) const {
+        return m_balance == other.m_balance &&
+            (std::strcmp(m_name, other.m_name) == 0) &&
+            (std::strcmp(m_lastname, other.m_lastname) == 0);
+    }
 public:
     std::uint64_t header1;
     const char *m_name;
     const char *m_lastname;
     std::size_t m_balance;
 };
+
+namespace std {
+    template <>
+    struct hash<Person64bH> {
+        std::size_t operator()(const Person64bH& p) const {
+            return ((std::hash<const char*>()(p.m_name) ^ (std::hash<const char*>()(p.m_lastname) << 1)) >> 1)
+                   ^ (std::hash<std::size_t>()(p.m_balance) << 1);
+        }
+    };
+}
 
 class Person128bH final {
 public:
@@ -69,6 +84,11 @@ public:
         m_balance += (std::size_t) (m_balance * ((double) percent / 100));
     }
 
+    bool operator==(const Person128bH& other) const {
+        return m_balance == other.m_balance &&
+               (std::strcmp(m_name, other.m_name) == 0) &&
+               (std::strcmp(m_lastname, other.m_lastname) == 0);
+    }
 public:
     std::uint64_t header1;
     std::uint64_t header2;
@@ -77,13 +97,21 @@ public:
     std::size_t m_balance;
 };
 
+namespace std {
+    template <>
+    struct hash<Person128bH> {
+        std::size_t operator()(const Person128bH& p) const {
+            return ((std::hash<const char*>()(p.m_name) ^ (std::hash<const char*>()(p.m_lastname) << 1)) >> 1)
+                   ^ (std::hash<std::size_t>()(p.m_balance) << 1);
+        }
+    };
+}
+
 static_assert(sizeof(Person64bH) == sizeof(std::uint64_t) * 4, "Unexpected Person64bH class align");
 static_assert(sizeof(Person128bH) == sizeof(std::uint64_t) * 5, "Unexpected Person128bH class align");
 
 namespace rd {
     const char *genstring(size_t length);
-
-    std::size_t genbalance();
 
     class Uniform final {
     public:

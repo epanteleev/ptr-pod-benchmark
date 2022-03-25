@@ -136,6 +136,15 @@ class HashMap final {
     int modCount{};
 
 public:
+
+    static Entry<K, V>** makeTable(std::size_t size) {
+        auto** table = new Entry<K, V>*[size];
+        for (std::size_t i = 0; i < size; i++) {
+            table[i] = nullptr; // Todo use memset
+        }
+        memset(table, 0, sizeof(Entry<K, V>**));
+        return table;
+    }
     /**
      * Constructs an empty <tt>HashMap</tt> with the specified initial
      * capacity and load factor.
@@ -161,7 +170,7 @@ public:
 
         this->loadFactor = loadFactor;
         threshold = (int) (capacity * loadFactor);
-        table = new Entry<K, V>[capacity];
+        table = makeTable(capacity);
         tableLength = capacity;
         init();
     }
@@ -182,7 +191,7 @@ public:
     HashMap() {
         this->loadFactor = DEFAULT_LOAD_FACTOR;
         threshold = (int) (DEFAULT_INITIAL_CAPACITY * DEFAULT_LOAD_FACTOR);
-        table = new Entry<K, V>*[DEFAULT_INITIAL_CAPACITY];
+        table = makeTable(DEFAULT_INITIAL_CAPACITY);
         tableLength = DEFAULT_INITIAL_CAPACITY;
         init();
     }
@@ -225,12 +234,10 @@ public:
         // constant multiples at each bit position have a bounded
         // number of collisions (approximately 8 at default load factor).
         //Todo signed shift
-        unsigned int uh{};
-        memcpy(&uh, &h, sizeof(int));
+        auto uh = (unsigned int) h;
         uh ^= (uh >> 20) ^ (uh >> 12);
         auto result = uh ^ (uh >> 7) ^ (uh >> 4);
-        memcpy(&h, &result, sizeof(int));
-        return h;
+        return (int)h;
     }
 
     /**
@@ -354,7 +361,7 @@ public:
         int hash = this->hash(std::hash<K>{}(*key)); // Todo key->hashCode()
         int i = indexFor(hash, tableLength);
         for (Entry<K, V> *e = table[i]; e != nullptr; e = e->next) {
-            K *k;
+            K *k{};
             if (e->hash == hash && ((k = e->key) == key || (*key == *k))) {
                 V *oldValue = e->value;
                 e->value = value;
@@ -439,7 +446,7 @@ private:
             return;
         }
 
-        auto *newTable = new Entry<K, V>*[newCapacity];
+        auto **newTable = makeTable(newCapacity);
         transfer(newTable);
         table = newTable;
         tableLength = newCapacity;
