@@ -26,14 +26,15 @@ TEST(HashMap, Creation2) {
     rd::Uniform un(5, 100000, 20222022122);
     std::size_t len = 220;
 
+    rd::RandomString rdStr(10);
     std::vector<Person128bH*> p;
     for (std::size_t i = 0; i < len; i++) {
-        p.emplace_back(new Person128bH(rd::genstring(10),rd::genstring(10),un()));
+        p.emplace_back(new Person128bH(rdStr(), rdStr(), un()));
     }
 
     std::vector<std::string*> s;
     for (std::size_t i = 0; i < len; i++) {
-        s.emplace_back(new std::string(rd::genstring(10)));
+        s.emplace_back(new std::string(rdStr()));
     }
 
     for (std::size_t i = 0; i < len; i++) {
