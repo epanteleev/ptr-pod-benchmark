@@ -15,10 +15,9 @@ public:
     void SetUp(const benchmark::State &state) override {
         persons.clear();
         rd::Uniform un(5, 100000, 20222022122);
+        rd::RandomString rnStr(10);
         for (auto i = 0; i < state.range(0); i++) {
-            persons.push_back(new Person64bH(rd::genstring(10),
-                                             rd::genstring(10),
-                                             un()));
+            persons.push_back(new Person64bH(rnStr(), rnStr(), un()));
         }
     }
 
@@ -40,10 +39,9 @@ public:
         persons.clear();
         arena.reset();
         rd::Uniform un(5, 100000, 20222022122);
+        rd::RandomString rnStr(10);
         for (auto i = 0; i < state.range(0); i++) {
-            persons.push_back(arena.alloc<Person64bH>(rd::genstring(10),
-                                                      rd::genstring(10),
-                                                      un()));
+            persons.push_back(arena.alloc<Person64bH>(rnStr(), rnStr(), un()));
         }
     }
 
@@ -65,10 +63,9 @@ public:
     void SetUp(const benchmark::State &state) override {
         persons.clear();
         rd::Uniform un(5, 100000, 20222022122);
+        rd::RandomString rnStr(10);
         for (auto i = 0; i < state.range(0); i++) {
-            persons.push_back(new Person128bH(rd::genstring(10),
-                                              rd::genstring(10),
-                                               un()));
+            persons.push_back(new Person128bH(rnStr(), rnStr(), un()));
         }
     }
 
@@ -89,11 +86,10 @@ public:
     void SetUp(const benchmark::State &state) override {
         persons.clear();
         arena.reset();
+        rd::RandomString rnStr(10);
         rd::Uniform un(5, 100000, 20222022122);
         for (auto i = 0; i < state.range(0); i++) {
-            persons.push_back(arena.alloc<Person128bH>(rd::genstring(10),
-                                                       rd::genstring(10),
-                                                       un()));
+            persons.push_back(arena.alloc<Person128bH>(rnStr(), rnStr(), un()));
         }
     }
 

@@ -1,17 +1,14 @@
 #include "Person.h"
 
 namespace rd {
-    const char *genstring(std::size_t length) {
+    const char *RandomString::operator()() {
         const char *string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.-#'?!";
+        char *randomString = new char[m_length + 1];
 
-        rd::Uniform un(0, strlen(string) - 1, 2122212211);
-        char *randomString = new char[length + 1];
-
-        for (std::size_t n = 0; n < length; n++) {
-            randomString[n] = string[un()];
+        for (std::size_t n = 0; n < m_length; n++) {
+            randomString[n] = string[m_un()];
         }
-
-        randomString[length] = '\0';
+        randomString[m_length] = '\0';
 
         return randomString;
     }

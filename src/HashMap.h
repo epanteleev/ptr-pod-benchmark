@@ -5,7 +5,7 @@
 #include <cmath>
 #include <limits>
 #include <set>
-
+//https://github.com/openjdk-mirror/jdk7u-jdk/blob/master/src/share/classes/java/util/HashMap.java
 template<typename K, typename V>
 class HashMap;
 
@@ -139,10 +139,7 @@ public:
 
     static Entry<K, V>** makeTable(std::size_t size) {
         auto** table = new Entry<K, V>*[size];
-        for (std::size_t i = 0; i < size; i++) {
-            table[i] = nullptr; // Todo use memset
-        }
-        memset(table, 0, sizeof(Entry<K, V>**));
+        memset(table, 0, sizeof(Entry<K, V>**) * size);
         return table;
     }
     /**
@@ -340,7 +337,6 @@ public:
         return nullptr;
     }
 
-
     /**
      * Associates the specified value with the specified key in this map.
      * If the map previously contained a mapping for the key, the old
@@ -361,8 +357,8 @@ public:
         int hash = this->hash(std::hash<K>{}(*key)); // Todo key->hashCode()
         int i = indexFor(hash, tableLength);
         for (Entry<K, V> *e = table[i]; e != nullptr; e = e->next) {
-            K *k{};
-            if (e->hash == hash && ((k = e->key) == key || (*key == *k))) {
+            K *k = e->key;
+            if (e->hash == hash && (*key == *k)) {
                 V *oldValue = e->value;
                 e->value = value;
                 e->recordAccess(this);
@@ -447,20 +443,19 @@ private:
         }
 
         auto **newTable = makeTable(newCapacity);
-        transfer(newTable);
+        transfer(newTable, newCapacity);
+        delete[] table;
         table = newTable;
         tableLength = newCapacity;
-
         threshold = (int) (newCapacity * loadFactor);
     }
 
     /**
      * Transfers all entries from current table to newTable.
      */
-    void transfer(Entry<K, V> **newTable) {
+    void transfer(Entry<K, V> **newTable, std::size_t newCapacity) {
         Entry<K, V> **src = table;
-        int newCapacity = tableLength;
-        for (int j = 0; j < tableLength; j++) {
+        for (std::size_t j = 0; j < tableLength; j++) {
             Entry<K, V> *e = src[j];
             if (e != nullptr) {
                 src[j] = nullptr;
@@ -639,30 +634,6 @@ private:
     }
 
 public:
-
-    /**
-     * Returns a shallow copy of this <tt>HashMap</tt> instance: the keys and
-     * values themselves are not cloned.
-     *
-     * @return a shallow copy of this map
-     */
-    HashMap<K, V> *clone() {
-        HashMap<K, V> *result = nullptr;
-//        try {
-//            result = (HashMap<K, V>) super.clone();
-//        } catch (CloneNotSupportedException e) {
-//            // assert false;
-//        }
-//        result.table = new Entry[table.length];
-//        result.entrySet = null;
-//        result.modCount = 0;
-//        result.size = 0;
-//        result.init();
-//        result.putAllForCreate(this);
-
-        return result;
-    }
-
     /**
      * Adds a new entry with the specified key, value and hash code to
      * the specified bucket.  It is the responsibility of this
@@ -673,8 +644,10 @@ public:
     void addEntry(int hash, K* key, V* value, int bucketIndex) {
         Entry<K, V> *e = table[bucketIndex];
         table[bucketIndex] = new Entry<K, V>(hash, key, value, e);
-        if (size++ >= threshold)
+        size += 1;
+        if (size >= threshold) {
             resize(2 * tableLength);
+        }
     }
 
     /**

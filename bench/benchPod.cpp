@@ -10,8 +10,9 @@ public:
     void SetUp(const benchmark::State &state) override {
         persons.clear();
         rd::Uniform un(5, 100000, 20222022122);
+        rd::RandomString rnStr(10);
         for (auto i = 0; i < state.range(0); i++) {
-            persons.emplace_back(rd::genstring(10), rd::genstring(10), un());
+            persons.emplace_back(rnStr(), rnStr(), un());
         }
     }
 
@@ -28,8 +29,9 @@ public:
     void SetUp(const benchmark::State &state) override {
         persons.clear();
         rd::Uniform un(5, 100000, 20222022122);
+        rd::RandomString rnStr(10);
         for (auto i = 0; i < state.range(0); i++) {
-            persons.emplace_back(rd::genstring(10), rd::genstring(10), un());
+            persons.emplace_back(rnStr(), rnStr(), un());
         }
     }
 

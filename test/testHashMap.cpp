@@ -24,7 +24,7 @@ TEST(HashMap, Creation1) {
 TEST(HashMap, Creation2) {
     HashMap<std::string, Person128bH> map;
     rd::Uniform un(5, 100000, 20222022122);
-    std::size_t len = 10000;
+    std::size_t len = 220;
 
     std::vector<Person128bH*> p;
     for (std::size_t i = 0; i < len; i++) {
@@ -41,7 +41,7 @@ TEST(HashMap, Creation2) {
     }
 
     for (std::size_t i = 0; i < len; i++) {
-        ASSERT_EQ(*map.get(s[i]), *p[i]);
+        ASSERT_EQ(map.get(s[i]), p[i]);
     }
 }
 

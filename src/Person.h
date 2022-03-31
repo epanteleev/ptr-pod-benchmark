@@ -111,7 +111,6 @@ static_assert(sizeof(Person64bH) == sizeof(std::uint64_t) * 4, "Unexpected Perso
 static_assert(sizeof(Person128bH) == sizeof(std::uint64_t) * 5, "Unexpected Person128bH class align");
 
 namespace rd {
-    const char *genstring(size_t length);
 
     class Uniform final {
     public:
@@ -134,7 +133,7 @@ namespace rd {
     class RandomAccess final {
     public:
         explicit RandomAccess(std::size_t arrlen) :
-                m_rd(0, arrlen, 20222022) {}
+                m_rd(0, arrlen - 1, 20222022) {}
 
         ~RandomAccess() = default;
 
@@ -145,5 +144,18 @@ namespace rd {
 
     public:
         rd::Uniform m_rd;
+    };
+
+    class RandomString final {
+    public:
+        explicit RandomString(std::size_t length):
+            m_length(length),
+            m_un(0, length, 20222123)
+            {}
+
+        const char* operator()();
+    private:
+        std::size_t m_length{};
+        rd::Uniform m_un;
     };
 }
