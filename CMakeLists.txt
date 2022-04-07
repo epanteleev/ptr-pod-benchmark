@@ -9,6 +9,4 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O5")
 
 add_subdirectory(src)
-add_subdirectory(test)
-
 add_subdirectory(bench)

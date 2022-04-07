@@ -54,7 +54,10 @@ BENCHMARK_DEFINE_F(PodPerson64bH, RandomAccess)(benchmark::State& state) {
     for (auto _ : state) {
         benchmark::ClobberMemory();
         for (std::size_t i = 0; i < persons.size(); i++) {
-            persons[ra.next()].updateBalance(10);
+            state.PauseTiming();
+            auto idx = ra.next();
+            state.ResumeTiming();
+            persons[idx].updateBalance(10);
         }
     }
     benchmark::DoNotOptimize(persons);
@@ -75,7 +78,10 @@ BENCHMARK_DEFINE_F(PodPerson128bH, RandomAccess)(benchmark::State& state) {
     for (auto _ : state) {
         benchmark::ClobberMemory();
         for (std::size_t i = 0; i < persons.size(); i++) {
-            persons[ra.next()].updateBalance(10);
+            state.PauseTiming();
+            auto idx = ra.next();
+            state.ResumeTiming();
+            persons[idx].updateBalance(10);
         }
     }
     benchmark::DoNotOptimize(persons);
